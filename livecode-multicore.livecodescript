@@ -1,8 +1,14 @@
-// LIVECODE MULTICORE LIBRARY
-// VERSION: 1.0
-// AUTHOR: [Tom Glod @ MakeShyft R.D.A, Claude Opus]
-// DATE: [August 8, 2024]
-// LICENSE: MIT
+script "livecode-multicore.livecodescript"
+
+//*********************************************************************************
+//Livecode MutiCore Library
+//MIT License
+//Compiled by Tom Glod (ww.makeshyft.com)
+//Code written by Anthropic's Claude Opus
+//Tested and Corrected by all contributors (Thank you to all)
+//July 11, 2024
+//https://github.com/MakeShyftRDA/Websockets-for-Livecode
+//*********************************************************************************
 
 // INTRODUCTION:
 // This library provides a flexible and secure framework for implementing
