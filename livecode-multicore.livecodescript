@@ -25,7 +25,7 @@ script "livecode-multicore.livecodescript"
 // USAGE:
 // 1. Configure the library using MultiCore_Configure
 // 2. Initialize the multi-core system with MultiCore_Initialize
-// 3. Use MultiCore_SendRequest to send tasks to sibling cores
+// 3. Use MultiCore_SendRequest to send tasks to helper cores
 // 4. Handle incoming requests with MultiCore_HandleIncomingRequest
 // 5. Manage core health and load balancing using provided utility functions
 
@@ -96,20 +96,20 @@ end MultiCore_LogError
 
 command MultiCore_Initialize
    // CHECK IF IT'S THE MAIN CORE
-   // IF MAIN CORE, INITIALIZE SIBLING CORES BASED ON CONFIGURATION
-   // IF SIBLING CORE, PERFORM NECESSARY SETUP
+   // IF MAIN CORE, INITIALIZE HELPER CORES BASED ON CONFIGURATION
+   // IF HELPER CORE, PERFORM NECESSARY SETUP
 end MultiCore_Initialize
 
 command MultiCore_Shutdown
-   // CLOSE ALL SIBLING CORES OR CONNECTIONS
+   // CLOSE ALL HELPER CORES OR CONNECTIONS
    // PERFORM CLEANUP OPERATIONS
 end MultiCore_Shutdown
 
-command MultiCore_ManageSiblingCores
-   // MONITOR SIBLING CORES
+command MultiCore_ManageHelperCores
+   // MONITOR HELPER CORES
    // RESTART OR REINITIALIZE CORES IF NECESSARY
    // HANDLE LOAD BALANCING IF IMPLEMENTED
-end MultiCore_ManageSiblingCores
+end MultiCore_ManageHelperCores
 
 function MultiCore_CheckCoreHealth pCoreIdentifier
    // CHECK THE HEALTH STATUS OF A SPECIFIC CORE
@@ -178,32 +178,32 @@ end MultiCore_RotateKeys
 
 // PROCESS-BASED IMPLEMENTATION
 
-command MultiCore_Process_LaunchSibling pSiblingIdentifier
-   // LAUNCH A NEW PROCESS FOR THE SIBLING CORE
+command MultiCore_Process_LaunchHelper pHelperIdentifier
+   // LAUNCH A NEW PROCESS FOR THE HELPER CORE
    // PASS NECESSARY STARTUP PARAMETERS
    // ESTABLISH INITIAL COMMUNICATION
-end MultiCore_Process_LaunchSibling
+end MultiCore_Process_LaunchHelper
 
-command MultiCore_Process_CloseSibling pSiblingIdentifier
-   // GRACEFULLY TERMINATE THE SIBLING PROCESS
+command MultiCore_Process_CloseHelper pHelperIdentifier
+   // GRACEFULLY TERMINATE THE HELPER PROCESS
    // PERFORM ANY NECESSARY CLEANUP
-end MultiCore_Process_CloseSibling
+end MultiCore_Process_CloseHelper
 
-function MultiCore_Process_ReadFromSibling pSiblingIdentifier
-   // READ DATA FROM THE SPECIFIED SIBLING PROCESS
+function MultiCore_Process_ReadFromHelper pHelperIdentifier
+   // READ DATA FROM THE SPECIFIED HELPER PROCESS
    // HANDLE ANY READ ERRORS
    // RETURN THE READ DATA
-end MultiCore_Process_ReadFromSibling
+end MultiCore_Process_ReadFromHelper
 
-command MultiCore_Process_WriteToSibling pSiblingIdentifier, pData
-   // WRITE DATA TO THE SPECIFIED SIBLING PROCESS
+command MultiCore_Process_WriteToHelper pHelperIdentifier, pData
+   // WRITE DATA TO THE SPECIFIED HELPER PROCESS
    // HANDLE ANY WRITE ERRORS
-end MultiCore_Process_WriteToSibling
+end MultiCore_Process_WriteToHelper
 
-function MultiCore_Process_IsSiblingRunning pSiblingIdentifier
-   // CHECK IF THE SPECIFIED SIBLING PROCESS IS STILL RUNNING
+function MultiCore_Process_IsHelperRunning pHelperIdentifier
+   // CHECK IF THE SPECIFIED HELPER PROCESS IS STILL RUNNING
    // RETURN TRUE IF RUNNING, FALSE OTHERWISE
-end MultiCore_Process_IsSiblingRunning
+end MultiCore_Process_IsHelperRunning
 
 // HTTPD-BASED IMPLEMENTATION
 
@@ -218,12 +218,12 @@ command MultiCore_HTTPD_StopServer
 end MultiCore_HTTPD_StopServer
 
 command MultiCore_HTTPD_HandleRequest pRequestData
-   // PROCESS INCOMING HTTP REQUESTS FROM SIBLING CORES
+   // PROCESS INCOMING HTTP REQUESTS FROM HELPER CORES
    // ROUTE REQUEST TO APPROPRIATE HANDLER
 end MultiCore_HTTPD_HandleRequest
 
 command MultiCore_HTTPD_SendResponse pCoreIdentifier, pResponseData
-   // SEND HTTP RESPONSE TO A SIBLING CORE
+   // SEND HTTP RESPONSE TO A HELPER CORE
    // HANDLE ANY TRANSMISSION ERRORS
 end MultiCore_HTTPD_SendResponse
 
@@ -235,18 +235,18 @@ end MultiCore_HTTPD_IsServerRunning
 // COMMON INTERFACE HANDLERS
 
 command MultiCore_SendRequest pTargetCore, pRequestData
-   // SEND A REQUEST TO A SIBLING CORE
+   // SEND A REQUEST TO A HELPER CORE
    // USE EITHER PROCESS OR HTTPD METHOD BASED ON CONFIGURATION
 end MultiCore_SendRequest
 
 function MultiCore_ReceiveResponse pSourceCore
-   // RECEIVE A RESPONSE FROM A SIBLING CORE
+   // RECEIVE A RESPONSE FROM A HELPER CORE
    // USE EITHER PROCESS OR HTTPD METHOD BASED ON CONFIGURATION
    // RETURN THE RECEIVED RESPONSE
 end MultiCore_ReceiveResponse
 
 command MultiCore_HandleIncomingRequest pRequestData
-   // PROCESS AN INCOMING REQUEST FROM A SIBLING CORE
+   // PROCESS AN INCOMING REQUEST FROM A HELPER CORE
    // EXECUTE REQUESTED OPERATION
    // PREPARE RESPONSE DATA
 end MultiCore_HandleIncomingRequest
