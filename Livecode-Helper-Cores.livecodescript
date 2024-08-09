@@ -1,7 +1,8 @@
-// CENGINE MULTICORE LIBRARY
+// LIVECODE MULTICORE LIBRARY
 // VERSION: 1.0
-// AUTHOR: [Your Name/Organization]
-// DATE: [Current Date]
+// AUTHOR: [Tom Glod @ MakeShyft R.D.A, Claude Opus]
+// DATE: [August 8, 2024]
+// LICENSE: MIT
 
 // INTRODUCTION:
 // This library provides a flexible and secure framework for implementing
@@ -32,11 +33,49 @@
 
 // CONFIGURATION AND UTILITY HANDLERS
 
+local sMultiCore
+
 command MultiCore_Configure pImplementationType, pOptions
-   // SET THE IMPLEMENTATION TYPE (PROCESS OR HTTPD)
-   // SET ANY OTHER NECESSARY CONFIGURATION OPTIONS
-   // STORE CONFIGURATION IN A GLOBAL VARIABLE OR CUSTOM PROPERTY
+    local tKey, tValue, tOption, tCoreNumber
+    
+    // VALIDATE INPUT PARAMETERS
+    if pImplementationType is not among the items of "Process,HTTPD" then
+        return "Error: Invalid implementation type. Use 'Process' or 'HTTPD'."
+    end if
+    
+    // INITIALIZE THE CONFIGURATION ARRAY
+    put pImplementationType into sMultiCore["Config"]["ImplementationType"]
+    
+    // PARSE AND STORE OPTIONS
+    repeat for each line tOption in pOptions
+        put item 1 of tOption into tKey
+        put item 2 to -1 of tOption into tValue
+        put tValue into sMultiCore["Config"][tKey]
+    end repeat
+    
+    // SET DEFAULT VALUES IF NOT PROVIDED
+    if sMultiCore["Config"]["NumberOfCores"] is empty then put 2 into sMultiCore["Config"]["NumberOfCores"]
+    if sMultiCore["Config"]["Port"] is empty and pImplementationType is "HTTPD" then put 8080 into sMultiCore["Config"]["Port"]
+    
+    // INITIALIZE CORE-SPECIFIC DATA STRUCTURES
+    repeat with tCoreNumber = 1 to sMultiCore["Config"]["NumberOfCores"]
+        put empty into sMultiCore[tCoreNumber]
+        put "Initialized" into sMultiCore[tCoreNumber]["Status"]
+    end repeat
+    
+    // LOG CONFIGURATION
+    MultiCore_LogMessage "Configuration set: " & the keys of sMultiCore["Config"]
+    
+    return "Configuration completed successfully."
 end MultiCore_Configure
+
+command MultiCore_LogMessage pMessage
+    local tLogEntry
+    
+    // IMPLEMENT LOGGING FUNCTIONALITY HERE
+    put "MultiCore [" & the long time & "]: " & pMessage into tLogEntry
+    put tLogEntry & return after msg
+end MultiCore_LogMessage
 
 function MultiCore_IsMainCore
    // CHECK IF THE CURRENT INSTANCE IS THE MAIN CORE
